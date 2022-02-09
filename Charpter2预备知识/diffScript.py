@@ -78,3 +78,4 @@ for i in range(5):
 x = np.arange(0,3,0.1)
 
 plot(x,[f2(x),4*x-4],'x','f(x)',legend=['f(x)','Tangent line (x=1)'])
+
