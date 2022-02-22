@@ -45,6 +45,9 @@ class AdditiveAttention(nn.Module):
         # key的形状：(batch_size，1，“键－值”对的个数，num_hiddens)
         # 使用广播方式进行求和
         features = queries.unsqueeze(2) + keys.unsqueeze(1) # queries在第三维拓展一个维度，keys在第二维拓展一个维度
+        print("queries's size : " + str(queries.shape))
+        print("keys's size : " + str(keys.shape))
+        print("features's size : "+str(features.shape))
         features = torch.tanh(features)
         # self.w_v仅有一个输出，因此从形状中移除最后那个维度。
         # scores的形状：（batch_size,查询个数，“键-值”对的个数）

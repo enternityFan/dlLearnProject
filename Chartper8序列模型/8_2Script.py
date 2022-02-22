@@ -90,6 +90,7 @@ def load_corpus_time_machine(max_tokens=-1): #@save
     vocab = Vocab(tokens)
     # 因为时光机器数据集中的每个文本行不一定是一个句子或一个段落，
     # 所以将所有文本行展平到一个列表中
+
     corpus = [vocab[token] for line in tokens for token in line]
     if max_tokens > 0:
         corpus = corpus[:max_tokens]
@@ -103,8 +104,11 @@ tokens = tokenize(lines)
 for i in range(11):
     print(tokens[i])
 vocab = Vocab(tokens)
+print(vocab.token_to_idx['the'])
+print(vocab.idx_to_token[1])
 print(list(vocab.token_to_idx.items())[:10])
-
+print(vocab['the'],vocab[0],vocab[2])
 for i in [0, 10]:
     print('文本:', tokens[i])
     print('索引:', vocab[tokens[i]])
+

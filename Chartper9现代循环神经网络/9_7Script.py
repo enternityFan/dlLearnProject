@@ -49,11 +49,17 @@ class Seq2SeqDecoder(d2l.Decoder):
     def forward(self, X, state):
         # 输出‘X’的形状：（batch_size,num_steps,embed_size)
         X = self.embedding(X).permute(1,0,2)
+        print("X's size:" +str(X.shape))
         # 广播context,使其具有与X相同的num_steps
+        print("state's size:" + str(state.shape))
         context = state[-1].repeat(X.shape[0],1,1)
+        print("context's size:" +str(context.shape))
         X_and_context = torch.cat((X,context),2)
+        print("X_and_context's size:" + str(X_and_context.shape))
         output,state = self.rnn(X_and_context,state)
         output = self.dense(output).permute(1,0,2)
+        print("output's size:" + str(output.shape))
+        print("state's size:" + str(state.shape))
         # output的形状：(batch_size,num_steps,vocab_size)
         # state[0]的形状：（num_layers,batch_size,num_hiddens)
         return output,state
@@ -108,7 +114,10 @@ def train_seq2seq(net,data_iter,lr,num_epochs,tgt_vocab,device):
             X,X_valid_len,Y,Y_valid_len = [x.to(device) for x in batch]
             bos = torch.tensor([tgt_vocab['<bos>']] * Y.shape[0],
                                device=device).reshape(-1,1)
+            print("bos'size: " + str(bos.shape))
+            print("Y'size: " +str(Y.shape))
             dec_input = torch.cat([bos,Y[:,:-1]],1) # 强制教学
+            print("dec_input'ssize: " + str(dec_input.shape))
             Y_hat,_ = net(X,dec_input,X_valid_len)
             l = loss(Y_hat,Y,Y_valid_len)
             l.sum().backward() # 损失函数的标量进行“反向传播”
@@ -144,6 +153,7 @@ def predict_seq2seq(net,src_sentence,src_vocab,tgt_vocab,num_steps,device,
     output_seq,attention_weight_seq = [],[]
     for _ in range(num_steps):
         Y,dec_state = net.decoder(dec_X,dec_state)
+
         # 我们使用具有预测最高可能性的词元，作为解码器在下一时间步的输入
         dec_X = Y.argmax(dim=2)
         pred = dec_X.squeeze(dim=0).type(torch.int32).item()

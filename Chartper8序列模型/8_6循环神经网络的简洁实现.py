@@ -19,6 +19,7 @@ print(state.shape)
 
 X = torch.rand(size = (num_steps,batch_size,len(vocab)))
 Y,state_new = rnn_layer(X,state)
+print(X.shape)
 print(Y.shape,state_new.shape)
 
 
