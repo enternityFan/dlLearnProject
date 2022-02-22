@@ -67,7 +67,7 @@ print(X < Y)
 print(X > Y)
 
 # 2
-a = torch.arange(4).reshape((2,2))
+a = torch.arange(8).reshape((4,2))
 b = torch.arange(2).reshape((1,2))
 print(a,b)
 print(a+b)
